@@ -1,0 +1,71 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+    const allItems = [
+      {id: 1, name: "Apple"},
+      {id: 2, name: "Orange"},
+      {id: 3, name: "Banana"},
+      {id: 4, name: "Mango"},
+      {id: 5, name: "Kiwi"},
+      {id: 6, name: "Pineapple"},
+      {id: 7, name: "Grape"},
+      {id: 8, name: "Watermelon"},
+      {id: 9, name: "Melon"},
+      {id: 10, name: "Strawberry"},
+    ]
+
+    const SearchBox = React.memo(({onSearch}) => {
+      console.log('SearchBox Rendered')
+      const _onChange = (e) => onSearch(e.target.value)
+      return (
+        <div>
+          <input type="text" onChange={_onChange}/>
+        </div>
+      )
+    })
+
+    const App = () => {
+      const [search, setSearch] = React.useState("")
+      const [items, setItems] = React.useState(() => allItems)
+      const [filteredItems, setFilteredItems] = React.useState([])
+      const time = new Date().getTime()
+
+      const onSearch = React.useCallback((text) => {
+        console.log(`Callback was created at ${time}`)
+        const filteredItems = items.filter((item) => 
+          item.name.toLowerCase().includes(text.toLowerCase())
+        )
+        setFilteredItems(filteredItems)
+      },[items])
+       
+      React.useEffect(() => {
+        setFilteredItems(items)
+      },[items])
+      
+      const shuffle = () => {
+        setItems([...allItems.sort(() => 0.5 - Math.random())])
+      }
+      return (
+        <main>
+          <section>
+            Search:
+            <SearchBox onSearch={onSearch}/>
+            <button onClick={shuffle}>Shuffle</button>
+          </section>
+          <section>
+            {
+              filteredItems.map((item) => (
+                <div key={item.id}>{item.name}</div>
+              ))
+            }
+          </section>
+        </main>
+      )
+    }
+    ReactDOM.createRoot(rootElement).render(<App />);
+  </script>
+</body>

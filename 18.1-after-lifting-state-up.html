@@ -1,0 +1,50 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    .panel {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 0px 10px 10px 10px;
+      max-width: 600px;
+    }
+  </style>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const Panel =({title, children, isActive, show, hide}) => {
+      const handleClick = () => {
+        if(isActive) {
+          hide();
+        }else {
+          show();
+        }
+      }
+      return (
+        <article className="panel">
+          <h3>{title}</h3>
+          {isActive && <p>{children}</p>}
+          <button onClick={handleClick} >
+            {isActive?"Hide":"Show"}
+          </button>
+        </article>
+      )
+    }
+
+    const App = () => {
+      const [activeIndex, setActiveIndex] = React.useState(1);
+      const hide = () => setActiveIndex(-1);
+      return <div>
+        <Panel title="About" isActive={activeIndex==0} show={()=> setActiveIndex(0)} hide={hide}>
+          With a population of about 2 million, Almaty is Kazakhstan's largest city. From 1929 to 1997, it was its capital city.
+        </Panel>
+        <Panel title="Etymology" isActive={activeIndex==1} show={()=> setActiveIndex(1)} hide={hide}>
+          The name comes from алма, the Kazakh word for "apple" and is often translated as "full of apples". In fact, the region surrounding Almaty is thought to be the ancestral home of the apple, and the wild Malus sieversii is considered a likely candidate for the ancestor of the modern domestic apple.
+        </Panel>
+      </div>
+    };
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>

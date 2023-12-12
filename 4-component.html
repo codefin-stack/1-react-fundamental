@@ -1,0 +1,45 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script src="https://unpkg.com/proptypes/prop-types.js"></script>
+
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const Content = ({ title, children }) => 
+      <div className="container">
+        <h1 className="title">{title}</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        { children }
+      </div>;
+
+    const Details = () => 
+      <div>
+        <h2>Details</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+
+    const Person = ({name, age}) => 
+      <div>
+        <h2>{name}</h2>
+        <p>Age: {age}</p>
+      </div>
+      
+    const Persons = () =>
+      <>
+        <Person name="Bob" age={20} />
+        <Person name="Alice" age={18} />
+      </>
+
+    ReactDOM.createRoot(rootElement).render(
+      <Content title="This is Content title">
+        <Details/>
+        <Persons/>
+      </Content>
+    );
+  </script>
+
+</body>

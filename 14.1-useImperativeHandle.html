@@ -1,0 +1,54 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const TextField = React.forwardRef(({label, ...props}, ref) => {
+      const inputRef = React.useRef(null);
+      React.useImperativeHandle(ref, () => ({
+          focus: () => {
+            inputRef.current.focus();
+          },
+          get value() {
+            return inputRef.current.value
+          }
+        })
+        ,[inputRef]);
+      return (<label>
+        {label}:
+        <input type="text" ref={inputRef} {...props}/>
+      </label>)
+    })
+    
+    const App = () => {
+      const idCardInputRef = React.useRef(null)
+      const nameInputRef = React.useRef(null)
+
+      React.useEffect(() => {
+        idCardInputRef.current.focus()
+      },[])
+      
+      const _alertSummary = () => {
+        const idCard = idCardInputRef.current.value
+        const name = nameInputRef.current.value
+        alert(`ID Card: ${idCard}, Name: ${name}`)
+      }
+      const _focusIdCard = () => {
+        idCardInputRef.current.focus()
+      }
+
+      return (
+        <section>
+          <TextField label="ID Card" type="text" name="idCard" ref={idCardInputRef}/>
+          <TextField label="Name" type="text" name="name" ref={nameInputRef}/>
+          <button onClick={_alertSummary}>Summary</button>
+          <button onClick={_focusIdCard}>Focus ID Card</button>
+        </section>
+      );
+    }
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>

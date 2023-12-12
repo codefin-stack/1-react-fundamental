@@ -1,0 +1,40 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+    const PI = 3.1415926535
+    
+    const App = () => {
+      const [radius, setRadius] = React.useState(0)
+      const [counter, setCounter] = React.useState(0)
+
+      const _onChange = React.useCallback((event) => {
+        console.log(`Set Radius ${event.target.value}`)
+        setRadius(event.target.value)
+      },[setRadius])
+
+      const area = React.useMemo(() => {
+        console.log("Calculate Area")
+        return PI * radius * radius
+      },[radius])
+
+      const _increase = React.useCallback(() => {
+        console.log("Increase Counter")
+        setCounter((prev)=> prev + 1)
+      },[setCounter])
+      
+      return (
+        <section>
+          <h2>Circle Area: {area}</h2>
+          <input type="number" value={radius} onChange={_onChange}/>
+          <button onClick={_increase}>Increment</button>
+        </section>
+      )
+    };
+
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>

@@ -1,0 +1,50 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const initialCounter = () => {
+      console.log("initial Counter")
+      return 10
+    }
+
+    const App = () => {
+      const [counter, setCounter] = React.useState(0)
+      const [height, setHeight] = React.useState(5)
+      const [width, setWidth] = React.useState(5)
+      const [area, setArea] = React.useState(25)
+
+      // Did Update After Render
+      React.useEffect(() => {
+        console.log(`Data has been changed counter: ${counter}, width: ${width}, height: ${height}, area: ${area}`)
+      })
+
+      // Did Mount
+      React.useEffect(() => {
+        console.log("Component has been mounted")
+      },[])
+
+      // Did Update After Render with Dependency
+      React.useEffect(() => {
+        console.log(`Area should be re-calculate ${width} x ${height}`)
+        setArea(width * height)
+      },[width, height])
+
+      return (
+        <div>
+          <h1>Regtangle Area: {area}</h1>
+          <p>Counter: {counter} </p>
+          <label>Width <input type="number" value={width} onChange={(e) => setWidth(e.target.value)}/> </label>
+          <label>Height <input type="number" value={height} onChange={(e) => setHeight(e.target.value)}/> </label>
+          <button onClick={() => setCounter((prev)=>prev+1)}>+</button>
+        </div>
+      )
+    }
+
+    ReactDOM.createRoot(rootElement).render(<App/>)
+  </script>
+</body>

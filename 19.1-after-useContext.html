@@ -1,0 +1,86 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    .side-nav-bar {
+      background-color:coral;
+      padding: 10px;
+      width: 300px;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+
+    .content-body {
+      padding: 10px;
+      flex: 1;
+      background-color: bisque;
+    }
+
+    .article {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const useAuth = () => {
+      const [user, setUser] = React.useState(()=>({username: "john", email: "", name: "John Doe"}))
+      return user
+    }
+
+    const AuthContext = React.createContext(null)
+    const AuthProvider = ({children}) => {
+      const user = useAuth()
+      return <AuthContext.Provider value={user}>
+        {children}
+      </AuthContext.Provider>
+    }
+    const SideNavBar = () => {
+      const user = React.useContext(AuthContext)
+
+      return <nav className="side-nav-bar">
+        <h2>Side Nav Bar</h2>
+        <p>Hello, {user.name} </p>
+        <ul>
+          <li>Home</li>
+          <li>Profile</li>
+          <li>Setting</li>
+        </ul>
+      </nav>
+    }
+
+    const Article = () => {
+      const user = React.useContext(AuthContext)
+      return <article className="article">
+        <h2>Article</h2>
+        <p> Mr. {user.name}</p>
+      </article>
+    }
+
+    const ContentBody = () => {
+      return <section className="content-body">
+        <h2>Content Body</h2>
+        <Article/>
+      </section>
+    }
+
+    const App = () => {
+      return (
+        <AuthProvider>
+          <main className="main">
+            <SideNavBar/>
+            <ContentBody/>
+          </main>
+        </AuthProvider>
+      )
+    }
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>

@@ -1,0 +1,121 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-transition-group/4.4.5/react-transition-group.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .box--enter-active {
+      background: green;
+      transform: scale(0);
+      animation: popIn 0.5s ease forwards;
+
+    }
+
+    .box--exit-active {
+      transform: scale(1);
+      background: red;
+      animation: popOut 0.5s ease forwards;
+    }
+
+    @keyframes popIn {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        60% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes popOut {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+          transform: scale(0);
+          opacity: 0;
+      }
+  }
+  </style>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+    const listPlayers = [
+      {id: 1, name: "Gary Neville", position: "RB", number: 2},
+      {id: 2, name: "David Beckham", position: "RM", number: 7},
+      {id: 3, name: "Paul Scholes", position: "CM", number: 18},
+      {id: 4, name: "Ryan Giggs", position: "LM", number: 11},
+      {id: 5, name: "Roy Keane", position: "CM", number: 16},
+      {id: 6, name: "Peter Schmeichel", position: "GK", number: 1},
+      {id: 7, name: "Eric Cantona", position: "CF", number: 7},
+      {id: 8, name: "Rio Ferdinand", position: "CB", number: 5},
+      {id: 9, name: "Phil Neville", position: "LB", number: 12},
+      {id: 10, name: "Ole Gunnar Solskjaer", position: "CF", number: 20},
+      {id: 11, name: "Andy Cole", position: "CF", number: 9},
+      {id: 12, name: "Dwight Yorke", position: "CF", number: 19},
+      {id: 13, name: "Denis Irwin", position: "LB", number: 3},
+      {id: 14, name: "Wayne Rooney", position: "CF", number: 10},
+      {id: 15, name: "Ronny Johnsen", position: "CB", number: 6},
+      {id: 16, name: "Mikael Silvestre", position: "CB", number: 27},
+      {id: 17, name: "Gary Pallister", position: "CB", number: 4},
+      {id: 18, name: "Nicky Butt", position: "CM", number: 11},
+      {id: 19, name: "Wes Brown", position: "CB", number: 24},
+      {id: 20, name: "John O'Shea", position: "CB", number: 22},
+      {id: 21, name: "Louis Saha", position: "CF", number: 9},
+      {id: 22, name: "Edwin van der Sar", position: "GK", number: 1},
+      {id: 23, name: "Michael Carrick", position: "CM", number: 16},
+      {id: 24, name: "Darren Fletcher", position: "CM", number: 24},
+      {id: 25, name: "Patrice Evra", position: "LB", number: 3},
+      {id: 26, name: "Cristiano Ronaldo", position: "RM", number: 7},
+      {id: 27, name: "Ji-Sung Park", position: "RM", number: 13},
+      {id: 28, name: "Robin van Persie", position: "CF", number: 20},
+      {id: 29, name: "Antonio Valencia", position: "RM", number: 25},
+      {id: 30, name: "Javier Hernandez", position: "CF", number: 14},
+    ];
+
+    const App = () => {
+      const [players, setPlayers] = React.useState(() => listPlayers);
+      const [search, setSearch] = React.useState("");
+      const _onChange = React.useCallback((event) => {
+        setSearch(event.target.value);
+      },[setSearch]);
+
+      const filteredPlayers = React.useMemo(() => {
+        console.log("Filter Players");
+        return players.filter((player) => {
+          return player.name.toLowerCase().includes(search.toLowerCase()) || player.position.toLowerCase().includes(search.toLowerCase()) || player.number.toString().includes(search);
+        });
+      },[search]);
+
+      return (
+        <div>
+          <div className="mb-6 p-4 ">
+            <input type="text" value={search} placeholder="Search" onChange={_onChange} className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+          </div>
+            <ReactTransitionGroup.TransitionGroup component="ul"> 
+            {filteredPlayers.map((user, i) => {
+              return (
+                <ReactTransitionGroup.CSSTransition  key={user.id} timeout={500} classNames="box-">
+                  <div className="box m-4 p-4 border rounded-lg bg-blue-500 text-white">
+                    <h2>{user.name}</h2>
+                    <div className="text-sm text-white ">Position: {user.position}</div>
+                    <div className="text-sm text-white ">Number: {user.number}</div>
+                  </div>
+                </ReactTransitionGroup.CSSTransition>
+              );
+            })}
+            </ReactTransitionGroup.TransitionGroup>
+        </div>
+      );
+    };
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>

@@ -1,0 +1,81 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style rel="stylesheet">
+    .box {
+      border: 1px solid #333;
+      display: flex;
+      margin: 10px;
+      background-color: lightblue;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .box--large {
+      height: 300px;
+      width: 300px;
+    }
+
+    .box--small {
+      height: 100px;
+      width: 100px;
+    }
+  </style>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+    const App = () =>{
+      function _onChange(event) {
+        console.log("Input was changed",event)
+      }
+      function _onClick(event) {
+        console.info("Button was clicked",event)
+      }
+      function _onKeyPress(event) {
+        console.log("Key was pressed",event)
+      }
+
+      function _onKeyPressNumericOnly(event) {
+        if(!/[0-9]/.test(event.key)) {
+          event.preventDefault()
+        }
+      }
+
+      function _onClickParent(event) {
+        console.log("Parent Clicked",e)
+      }
+
+      function _onClickChild1(event) {
+        console.log("Child 1 Clicked",e)
+      }
+
+      function _onClickChild2(event) {
+        console.log("Child 2 Clicked",e)
+      }
+
+      return <>
+        <input type="text" onChange={_onChange} onKeyPress={_onKeyPress} />
+
+        <button onClick={_onClick}>Click</button>
+
+        <div className="box box--large" onClick={_onClickParent}>
+          <h1>Parent</h1>
+          <div className="box box--small" onClick={_onClickChild1} >
+            <h1>Child 1</h1>
+          </div>
+          <div className="box box--small" onClick={_onClickChild2}>
+            <h1>Child 2</h1>
+          </div>
+        </div>
+
+        <label>Numeric</label>
+        <input type="text" onChange={_onChange} onKeyPress={_onKeyPressNumericOnly} />
+        
+      </>
+    }
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>

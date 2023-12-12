@@ -1,0 +1,43 @@
+<body>
+  <div id="vanilla"></div>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const vanillaElement = document.getElementById("vanilla");
+
+    function vanillaRender() {
+      vanillaElement.innerHTML = `
+        <div>
+          <h1>Vanilla Time</h1>
+          <p>Current time: ${new Date().toLocaleTimeString()}</p>
+        </div>
+      `
+    }
+
+    vanillaRender()
+    setInterval(vanillaRender, 1000)
+  </script>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+    const rootElementReactDOM = ReactDOM.createRoot(rootElement);
+
+    function reactRender() {
+      rootElementReactDOM.render(<App/>)
+    }
+    
+    const App = () => {
+      const time = new Date().toLocaleTimeString()
+      return (
+        <div>
+          <h1>React Time</h1>
+          <p>Current time: {time}</p>
+        </div>
+      )
+    }
+
+    reactRender()
+    setInterval(reactRender, 1000)
+  </script>
+</body>

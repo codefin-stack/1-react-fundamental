@@ -1,0 +1,15 @@
+<body>
+  <div id="root"></div>
+  <link rel="stylesheet" href="css/global.css">
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script type="text/javascript" >
+    const rootElement = document.getElementById("root");
+		const element = React.createElement("div", {className: "container"}, 
+      React.createElement("h1", {className: "title"}, "Hello World"),
+      React.createElement("p",null, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    )
+    ReactDOM.createRoot(rootElement).render(element)
+    console.log(babel)
+  </script>
+</body>

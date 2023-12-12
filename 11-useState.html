@@ -1,0 +1,39 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const initialCounter = () => {
+      console.log("initial Counter")
+      return Math.round(Math.random()*10)
+    }
+
+    const App = () => {
+      // explain with Lazy initial state and without
+      const [state, setState] = React.useState(() => ({
+        count: initialCounter()
+      }))
+
+       // explain with Prev and Without
+      function _increase() {
+        setState((prevState) => ({
+          count: prevState.count + 1
+        }))
+      }
+
+      return (
+        <div>
+          <h1>Counter</h1>
+          <p>Count: {state.count}</p>
+          <button onClick={_increase}>Increase</button>
+        </div>
+      )
+    }
+
+    ReactDOM.createRoot(rootElement).render(<App/>)
+  </script>
+</body>

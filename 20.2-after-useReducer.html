@@ -1,0 +1,95 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/babel">
+    const rootElement = document.getElementById("root");
+
+    const TextField = ({name, label, value, onChange, type="text"}) => {
+      return (<div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={name}>
+          {label}
+        </label>
+        <input name={name} id={name} value={value} onChange={onChange} type={type} placeholder={label} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+      </div>)
+    }
+
+    const SelectorField = ({name, label, value, onChange, options}) => {
+      return (<div className="mb-4">
+        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-state">
+          State
+        </label>
+        <div className="relative">
+          <select name={name} value={value} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="grid-state" onChange={onChange}>
+            {options.map((option) => <option key={option.key} value={option.value}>{option.label}</option>)}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+      </div>)
+    }
+
+    const Button = ({label, onClick}) => {
+      return (<button onClick={onClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        {label}
+      </button>)
+    }
+
+    const Form = ({children, title}) => {
+      return <div className="p-4" >
+        <h1 className="text-2xl text-gray-500 font-bold mb-4">{title}</h1>
+        {children}
+      </div>
+    }
+
+
+    const registerFormReducer = (state, action) => {
+      if(action.type == "update") {
+        return {...state, [action.field]: action.value}
+      }
+      return state
+    }
+
+    const useRegisterForm = (initialState) => {
+      const [state, dispatch] = React.useReducer(registerFormReducer, initialState)
+      return [ state, (field, value) => dispatch({type: "update", field, value})]
+    }
+
+    const App = () => {
+      const [state, set] = useRegisterForm({
+        fname:"Hello",
+        lname:"",
+        birthDate: "1970-01-01",
+        gender: "M",
+        email: "",
+        phone: ""
+      })
+
+      const handleChange = (e) => {
+        set(e.target.name, e.target.value)
+      }
+      const _submit = (e) => {
+        e.preventDefault()
+        console.log(state)
+      }
+
+      return (<Form title="Register" >
+        <TextField name="fname" label="First Name" value={state.fname} onChange={handleChange}/>
+        <TextField name="lname" label="Last Name" value={state.lname} onChange={handleChange}/>
+        <TextField name="birthDate" label="Birth Date" value={state.birthDate} onChange={handleChange} type="date"/>
+        <SelectorField name="gender" label="Gender" value={state.gender} options={[
+          {key: 1, value: "F", label: "Female"},
+          {key: 2, value: "M", label: "Male"}]
+        } onChange={handleChange}/>
+        <TextField name="email" label="Email" value={state.email} onChange={handleChange} type="email"/>
+        <TextField name="phone" label="Phone" value={state.phone} onChange={handleChange}/>
+        <Button label="Submit" onClick={_submit}/>
+      </Form>)
+    }
+
+    ReactDOM.createRoot(rootElement).render(<App/>);
+  </script>
+</body>
